@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Social Media Content Planer – Anne Löwenstein Immobilien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Abel&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --mitternacht: #485F64;
+    --ostsee3: #709599;
+    --ostsee2: #94B7BB;
+    --ostsee1: #B6CFD1;
+    --zitrone: #FFEF19;
+    --sandbank1: #EEEBE5;
+    --sandbank2: #D1CCC3;
+    --white: #FAFAF7;
+    --text: #2A3538;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Abel', sans-serif;
+    background: var(--sandbank1);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(182,207,209,0.25) 0, transparent 35%),
+      radial-gradient(circle at 85% 70%, rgba(255,239,25,0.12) 0, transparent 40%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.82  0 0 0 0 0.76  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: auto, auto, 200px 200px;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px 20px 40px;
+    font-size: 16px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  header {
+    background: var(--white);
+    padding: 28px 36px;
+    border-radius: 4px;
+    box-shadow: 0 4px 24px rgba(72,95,100,0.08);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    border-left: 5px solid var(--mitternacht);
+  }
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-mark {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--ostsee1);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Caveat', cursive;
+    font-size: 30px;
+    color: var(--mitternacht);
+    font-weight: 600;
+    box-shadow: inset 0 0 0 2px var(--white), 0 0 0 1px var(--ostsee2);
+  }
+  h1 {
+    font-family: 'Noto Serif', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--mitternacht);
+    line-height: 1.15;
+    letter-spacing: 0.2px;
+  }
+  .subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--ostsee3);
+    margin-top: -2px;
+  }
+  .nav-controls { display: flex; align-items: center; gap: 14px; }
+  .nav-btn {
+    background: var(--sandbank1);
+    border: 1.5px solid var(--sandbank2);
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--mitternacht);
+    transition: all 0.2s;
+    font-family: 'Noto Serif', serif;
+  }
+  .nav-btn:hover:not(:disabled) {
+    background: var(--ostsee1);
+    border-color: var(--ostsee2);
+    transform: scale(1.05);
+  }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .month-title {
+    font-family: 'Noto Serif', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--mitternacht);
+    min-width: 220px;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+  .export-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+  .icon-btn {
+    background: var(--white);
+    border: 1.5px solid var(--sandbank2);
+    padding: 9px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Abel', sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--mitternacht);
+    transition: all 0.2s;
+  }
+  .icon-btn:hover { background: var(--ostsee1); border-color: var(--ostsee2); }
+  .icon-btn.primary { background: var(--zitrone); border-color: var(--zitrone); color: var(--mitternacht); font-weight: bold; }
+  .icon-btn.primary:hover { background: var(--mitternacht); border-color: var(--mitternacht); color: var(--zitrone); }
+
+  .legend {
+    background: var(--white);
+    padding: 14px 24px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(72,95,100,0.05);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--mitternacht);
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+
+  .calendar {
+    background: var(--white);
+    border-radius: 4px;
+    padding: 28px;
+    box-shadow: 0 4px 24px rgba(72,95,100,0.08);
+    position: relative;
+  }
+  .calendar::before {
+    content: '';
+    position: absolute;
+    top: -12px; right: 40px;
+    width: 80px; height: 24px;
+    background: var(--ostsee1);
+    opacity: 0.5;
+    transform: rotate(-2deg);
+    border-radius: 2px;
+  }
+  .weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--sandbank2);
+  }
+  .weekday {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--mitternacht);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 6px 4px;
+  }
+  .weekday.weekend { color: var(--ostsee3); }
+  .weekday-time {
+    display: block;
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ostsee3);
+    letter-spacing: 0.5px;
+    text-transform: none;
+    margin-top: 2px;
+  }
+  .weekday.peak .weekday-time { color: var(--mitternacht); }
+  .weekday.peak::after {
+    content: '★';
+    display: inline-block;
+    color: var(--zitrone);
+    margin-left: 3px;
+    text-shadow: 0 0 1px var(--mitternacht);
+  }
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+  }
+  .day {
+    aspect-ratio: 1;
+    background: var(--sandbank1);
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    min-height: 90px;
+  }
+  .day:hover {
+    background: var(--ostsee1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(72,95,100,0.15);
+  }
+  .day.empty { background: transparent; cursor: default; }
+  .day.empty:hover { background: transparent; transform: none; box-shadow: none; }
+  .day.weekend { background: #F4F1EA; }
+  .day.weekend:hover { background: var(--ostsee1); }
+  .day.holiday {
+    background: #FFFBD6;
+    position: relative;
+  }
+  .day.holiday::after {
+    content: '';
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 8px; height: 8px;
+    background: var(--zitrone);
+    border-radius: 50%;
+  }
+  .day.today {
+    border-color: var(--mitternacht);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(72,95,100,0.15);
+  }
+  .day.today::before {
+    content: 'Heute';
+    position: absolute;
+    top: -6px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--mitternacht);
+    color: var(--zitrone);
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    padding: 1px 10px;
+    border-radius: 10px;
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .day.has-content { background: var(--ostsee1); border-color: var(--ostsee2); }
+  .day.has-content.weekend { background: var(--ostsee1); }
+  .day.has-content:hover { background: var(--ostsee2); }
+
+  .day-number {
+    font-family: 'Noto Serif', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--mitternacht);
+    line-height: 1;
+  }
+  .day.weekend .day-number { color: var(--ostsee3); }
+  .day.today .day-number { color: var(--mitternacht); font-weight: 700; }
+  .holiday-name {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--ostsee3);
+    margin-top: 3px;
+    line-height: 1.05;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .content-preview {
+    font-size: 11px;
+    margin-top: auto;
+    padding: 3px 7px;
+    border-radius: 3px;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Abel', sans-serif;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(72,95,100,0.55);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: 6px;
+    padding: 32px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 92vh;
+    overflow-y: auto;
+    position: relative;
+    border-top: 6px solid var(--mitternacht);
+    box-shadow: 0 20px 60px rgba(72,95,100,0.3);
+  }
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: -18px; right: 30px;
+    width: 40px; height: 40px;
+    background: var(--zitrone);
+    border-radius: 50%;
+    z-index: -1;
+  }
+  .modal h2 {
+    font-family: 'Noto Serif', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--mitternacht);
+    margin-bottom: 4px;
+  }
+  .modal-date {
+    font-family: 'Caveat', cursive;
+    color: var(--ostsee3);
+    font-size: 18px;
+    margin-bottom: 24px;
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--mitternacht);
+    margin-bottom: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'Abel', sans-serif;
+  }
+  .form-group select,
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--sandbank2);
+    border-radius: 4px;
+    font-size: 15px;
+    font-family: 'Abel', sans-serif;
+    background: var(--sandbank1);
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .form-group select:focus,
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--mitternacht);
+    background: var(--white);
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .btn {
+    padding: 11px 22px;
+    border: 1.5px solid transparent;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Abel', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .btn-primary {
+    background: var(--zitrone);
+    color: var(--mitternacht);
+    border-color: var(--zitrone);
+  }
+  .btn-primary:hover {
+    background: var(--mitternacht);
+    border-color: var(--mitternacht);
+    color: var(--zitrone);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--mitternacht);
+    border-color: var(--sandbank2);
+  }
+  .btn-secondary:hover { background: var(--sandbank1); }
+  .btn-danger {
+    background: transparent;
+    color: #B04848;
+    border-color: #E5C5C5;
+  }
+  .btn-danger:hover { background: #FBEFEF; }
+
+  .follower-panel {
+    background: var(--white);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin-top: 20px;
+    box-shadow: 0 4px 24px rgba(72,95,100,0.08);
+    border-left: 5px solid var(--mitternacht);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 28px;
+    align-items: center;
+  }
+  .follower-panel h3 {
+    font-family: 'Noto Serif', serif;
+    font-size: 18px;
+    color: var(--mitternacht);
+    margin-bottom: 4px;
+  }
+  .follower-panel .subline {
+    font-family: 'Caveat', cursive;
+    color: var(--ostsee3);
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+  .follower-count {
+    font-family: 'Noto Serif', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--mitternacht);
+    line-height: 1;
+  }
+  .follower-delta {
+    font-family: 'Abel', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+  .follower-delta.up { color: #2B7A53; }
+  .follower-delta.down { color: #B04848; }
+  .follower-delta.same { color: var(--ostsee3); }
+  .follower-input-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    align-items: center;
+  }
+  .follower-input-row input {
+    width: 120px;
+    padding: 9px 12px;
+    border: 1.5px solid var(--sandbank2);
+    border-radius: 4px;
+    font-family: 'Abel', sans-serif;
+    font-size: 15px;
+    background: var(--sandbank1);
+  }
+  .follower-input-row input:focus { outline: none; border-color: var(--mitternacht); background: var(--white); }
+  .chart-wrap { width: 100%; }
+  .chart-wrap svg { width: 100%; height: 160px; display: block; }
+  .chart-caption {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Abel', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ostsee3);
+    margin-top: 6px;
+  }
+  .chart-empty {
+    text-align: center;
+    padding: 30px 20px;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--ostsee3);
+    background: var(--sandbank1);
+    border-radius: 4px;
+  }
+  @media (max-width: 700px) {
+    .follower-panel { grid-template-columns: 1fr; }
+  }
+
+  .timing-panel {
+    background: var(--white);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin-top: 20px;
+    box-shadow: 0 4px 24px rgba(72,95,100,0.08);
+    border-left: 5px solid var(--zitrone);
+  }
+  .timing-panel h3 {
+    font-family: 'Noto Serif', serif;
+    font-size: 18px;
+    color: var(--mitternacht);
+    margin-bottom: 4px;
+  }
+  .timing-panel .subline {
+    font-family: 'Caveat', cursive;
+    color: var(--ostsee3);
+    font-size: 18px;
+    margin-bottom: 18px;
+  }
+  .timing-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .timing-table th {
+    text-align: left;
+    font-family: 'Abel', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--mitternacht);
+    padding: 8px 10px;
+    border-bottom: 2px solid var(--sandbank2);
+  }
+  .timing-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--sandbank1);
+    vertical-align: middle;
+  }
+  .timing-table tr.peak { background: rgba(255,239,25,0.15); }
+  .timing-table tr.peak td:first-child { font-weight: 700; }
+  .timing-table tr.avoid td { color: #B04848; background: #FBEFEF; font-weight: 600; }
+  .timing-table .followers {
+    display: inline-block;
+    padding: 2px 10px;
+    background: var(--ostsee1);
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--mitternacht);
+  }
+  .timing-table tr.peak .followers { background: var(--zitrone); }
+  .timing-table tr.avoid .followers { background: #F5D5D5; color: #B04848; }
+  .timing-table .day-label .marker {
+    display: inline-block;
+    margin-left: 6px;
+    font-family: 'Caveat', cursive;
+    color: var(--ostsee3);
+    font-size: 15px;
+  }
+  .timing-table tr.peak .day-label .marker { color: var(--mitternacht); }
+
+  .warning-tip {
+    background: #FBEFEF;
+    color: #B04848;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .warning-tip::before {
+    content: '!';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    background: #B04848;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .day-tip {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--ostsee3);
+    background: var(--sandbank1);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 18px;
+    border-left: 3px solid var(--ostsee2);
+  }
+  .day-tip.peak { background: rgba(255,239,25,0.18); border-left-color: var(--zitrone); color: var(--mitternacht); }
+  .day-tip.avoid { background: #FBEFEF; border-left-color: #B04848; color: #B04848; }
+
+  footer {
+    text-align: center;
+    margin-top: 24px;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--ostsee3);
+  }
+
+  @media (max-width: 700px) {
+    header { padding: 20px; }
+    h1 { font-size: 18px; }
+    .brand-mark { width: 48px; height: 48px; font-size: 24px; }
+    .calendar { padding: 14px; }
+    .day { padding: 5px; min-height: 70px; }
+    .day-number { font-size: 14px; }
+    .holiday-name, .content-preview { font-size: 10px; }
+    .weekday { font-size: 10px; letter-spacing: 1px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand">
+      <div class="brand-mark">AL</div>
+      <div>
+        <h1>Anne Löwenstein Immobilien</h1>
+        <div class="subtitle">Social Media Content Planer</div>
+      </div>
+    </div>
+    <div class="nav-controls">
+      <button class="nav-btn" id="prevBtn" title="Voriger Monat">‹</button>
+      <div class="month-title" id="monthTitle"></div>
+      <button class="nav-btn" id="nextBtn" title="Nächster Monat">›</button>
+    </div>
+    <div class="export-controls">
+      <button class="icon-btn primary" id="todayBtn">Heute</button>
+      <button class="icon-btn" id="exportBtn">Export</button>
+      <button class="icon-btn" id="importBtn">Import</button>
+      <input type="file" id="importFile" accept=".json" style="display:none">
+    </div>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--white);border:2px solid var(--mitternacht)"></div>Heute</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#F4F1EA;border:1px solid var(--sandbank2)"></div>Wochenende</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FFFBD6;border:1px solid var(--zitrone)"></div>Feiertag</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--ostsee1);border:1px solid var(--ostsee2)"></div>Geplant</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--mitternacht)"></div>Reel</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--ostsee3)"></div>Carousel</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--zitrone)"></div>Bild Beitrag</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--sandbank2)"></div>Story</div>
+  </div>
+
+  <div class="calendar">
+    <div class="weekdays">
+      <div class="weekday">Mo<span class="weekday-time">9:00</span></div>
+      <div class="weekday">Di<span class="weekday-time">9:00</span></div>
+      <div class="weekday">Mi<span class="weekday-time">9:00</span></div>
+      <div class="weekday">Do<span class="weekday-time">12:00</span></div>
+      <div class="weekday">Fr<span class="weekday-time">12:00</span></div>
+      <div class="weekday weekend">Sa<span class="weekday-time">12:00</span></div>
+      <div class="weekday weekend peak">So<span class="weekday-time">9:00</span></div>
+    </div>
+    <div class="days" id="daysGrid"></div>
+  </div>
+
+  <div class="follower-panel">
+    <div>
+      <h3>Instagram Follower</h3>
+      <div class="subline">Trag deine Zahl täglich kurz ein</div>
+      <div class="follower-count" id="followerCount">—</div>
+      <div class="follower-delta" id="followerDelta"></div>
+      <div class="follower-input-row">
+        <input type="number" id="followerInput" placeholder="z.B. 1245" min="0">
+        <button class="icon-btn primary" id="followerSaveBtn">Eintragen</button>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div id="chartContainer"></div>
+    </div>
+  </div>
+
+  <div class="timing-panel">
+    <h3>Deine besten Posting-Zeiten</h3>
+    <div class="subline">Basierend auf deinen aktiven Followern</div>
+    <table class="timing-table">
+      <thead>
+        <tr>
+          <th>Tag</th>
+          <th>Beste Zeit</th>
+          <th>Aktive Follower</th>
+          <th>Empfehlung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="day-label">Montag</td><td>9:00</td><td><span class="followers">958</span></td><td>Post / Karussell / Reel</td></tr>
+        <tr><td class="day-label">Dienstag</td><td>9:00</td><td><span class="followers">931</span></td><td>Story / Post</td></tr>
+        <tr><td class="day-label">Mittwoch</td><td>9:00</td><td><span class="followers">919</span></td><td>Story / Behind the Scenes</td></tr>
+        <tr><td class="day-label">Donnerstag</td><td>12:00</td><td><span class="followers">909</span></td><td>Post / Reel</td></tr>
+        <tr><td class="day-label">Freitag</td><td>12:00</td><td><span class="followers">895</span></td><td>Reel (Freizeitbereitschaft höher)</td></tr>
+        <tr><td class="day-label">Samstag</td><td>12:00</td><td><span class="followers">882</span></td><td>Reel / Listing</td></tr>
+        <tr class="peak"><td class="day-label">Sonntag <span class="marker">stärkster Tag!</span></td><td>9:00</td><td><span class="followers">971</span></td><td>Beste Inhalte hier posten</td></tr>
+        <tr class="avoid"><td class="day-label">18:00 Uhr</td><td>NIEMALS!</td><td><span class="followers">85–107</span></td><td>Schlechteste Zeit – nie posten!</td></tr>
+      </tbody>
+    </table>
+    <div class="warning-tip">Achtung: Um 18:00 Uhr sind nur 85–107 Follower aktiv. Diese Zeit vermeiden!</div>
+  </div>
+
+  <footer>Moin — viel Freude beim Planen! ✿</footer>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitle">Content planen</h2>
+    <div class="modal-date" id="modalDate"></div>
+    <div class="day-tip" id="dayTip"></div>
+    <div class="form-group">
+      <label for="contentType">Content Art</label>
+      <select id="contentType">
+        <option value="">-- Bitte wählen --</option>
+        <option value="Reel">Reel</option>
+        <option value="Carousel">Carousel</option>
+        <option value="Bild Beitrag">Bild Beitrag</option>
+        <option value="Story">Story</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="contentTitle">Inhalt / Thema</label>
+      <textarea id="contentTitle" placeholder="Worum geht es in dem Post?"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="caption">Caption</label>
+      <textarea id="caption" placeholder="Deine Caption, inkl. Hashtags..." style="min-height:140px;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="deleteBtn" style="margin-right:auto;display:none;">Löschen</button>
+      <button class="btn btn-secondary" id="cancelBtn">Abbrechen</button>
+      <button class="btn btn-primary" id="saveBtn">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const MONTHS_DE = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+
+// Deutsche Feiertage 2026 (bundesweit + einige Länderfeiertage)
+const HOLIDAYS = {
+  '2026-04-03': 'Karfreitag',
+  '2026-04-05': 'Ostersonntag',
+  '2026-04-06': 'Ostermontag',
+  '2026-05-01': 'Tag der Arbeit',
+  '2026-05-14': 'Christi Himmelfahrt',
+  '2026-05-24': 'Pfingstsonntag',
+  '2026-05-25': 'Pfingstmontag',
+  '2026-06-04': 'Fronleichnam',
+  '2026-08-15': 'Mariä Himmelfahrt',
+  '2026-10-03': 'Tag d. Dt. Einheit',
+  '2026-10-31': 'Reformationstag',
+  '2026-11-01': 'Allerheiligen',
+  '2026-11-18': 'Buß- und Bettag',
+  '2026-12-25': '1. Weihnachtstag',
+  '2026-12-26': '2. Weihnachtstag'
+};
+
+// Empfehlungen pro Wochentag (0 = Sonntag, 6 = Samstag)
+const DAY_TIPS = {
+  0: { time: '9:00',  followers: 971, rec: 'Beste Inhalte hier posten',     peak: true },   // Sonntag
+  1: { time: '9:00',  followers: 958, rec: 'Post / Karussell / Reel' },                       // Montag
+  2: { time: '9:00',  followers: 931, rec: 'Story / Post' },                                  // Dienstag
+  3: { time: '9:00',  followers: 919, rec: 'Story / Behind the Scenes' },                     // Mittwoch
+  4: { time: '12:00', followers: 909, rec: 'Post / Reel' },                                   // Donnerstag
+  5: { time: '12:00', followers: 895, rec: 'Reel (Freizeitbereitschaft höher)' },             // Freitag
+  6: { time: '12:00', followers: 882, rec: 'Reel / Listing' }                                 // Samstag
+};
+
+const TYPE_COLORS = {
+  'Reel':        { bg: '#485F64', fg: '#FFEF19' }, // Mitternacht / Zitrone
+  'Carousel':    { bg: '#709599', fg: '#FFFFFF' }, // Ostsee III / weiß
+  'Bild Beitrag':{ bg: '#FFEF19', fg: '#485F64' }, // Zitrone / Mitternacht
+  'Story':       { bg: '#D1CCC3', fg: '#485F64' }  // Sandbank II / Mitternacht
+};
+
+const TODAY = new Date();
+const TODAY_KEY = dateKey(TODAY);
+const YEAR = 2026;
+const MIN_MONTH = 3;  // April (0-indexed)
+const MAX_MONTH = 11; // Dezember
+
+let currentMonth = Math.max(MIN_MONTH, Math.min(MAX_MONTH, TODAY.getFullYear() === YEAR ? TODAY.getMonth() : MIN_MONTH));
+let selectedDate = null;
+let plans = loadPlans();
+
+function dateKey(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function loadPlans() {
+  try { return JSON.parse(localStorage.getItem('alImmoPlanner2026') || '{}'); }
+  catch { return {}; }
+}
+
+function savePlans() {
+  localStorage.setItem('alImmoPlanner2026', JSON.stringify(plans));
+}
+
+function render() {
+  document.getElementById('monthTitle').textContent = `${MONTHS_DE[currentMonth]} ${YEAR}`;
+  document.getElementById('prevBtn').disabled = currentMonth <= MIN_MONTH;
+  document.getElementById('nextBtn').disabled = currentMonth >= MAX_MONTH;
+
+  const grid = document.getElementById('daysGrid');
+  grid.innerHTML = '';
+
+  const firstDay = new Date(YEAR, currentMonth, 1);
+  const lastDay = new Date(YEAR, currentMonth + 1, 0);
+  let startOffset = (firstDay.getDay() + 6) % 7;
+
+  for (let i = 0; i < startOffset; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'day empty';
+    grid.appendChild(empty);
+  }
+
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const date = new Date(YEAR, currentMonth, d);
+    const key = dateKey(date);
+    const dayOfWeek = date.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const holiday = HOLIDAYS[key];
+    const plan = plans[key];
+
+    const cell = document.createElement('div');
+    cell.className = 'day';
+    if (isWeekend) cell.classList.add('weekend');
+    if (holiday) cell.classList.add('holiday');
+    if (key === TODAY_KEY) cell.classList.add('today');
+    if (plan && plan.type) cell.classList.add('has-content');
+
+    const numEl = document.createElement('div');
+    numEl.className = 'day-number';
+    numEl.textContent = d;
+    cell.appendChild(numEl);
+
+    if (holiday) {
+      const h = document.createElement('div');
+      h.className = 'holiday-name';
+      h.textContent = holiday;
+      h.title = holiday;
+      cell.appendChild(h);
+    }
+
+    if (plan && plan.type) {
+      const p = document.createElement('div');
+      p.className = 'content-preview';
+      const c = TYPE_COLORS[plan.type] || { bg: '#485F64', fg: '#fff' };
+      p.style.background = c.bg;
+      p.style.color = c.fg;
+      p.textContent = plan.title ? plan.title.slice(0, 22) : plan.type;
+      p.title = `${plan.type}${plan.title ? ': ' + plan.title : ''}`;
+      cell.appendChild(p);
+    }
+
+    cell.addEventListener('click', () => openModal(key));
+    grid.appendChild(cell);
+  }
+}
+
+function openModal(key) {
+  selectedDate = key;
+  const [y, m, d] = key.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  const weekdays = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  const holiday = HOLIDAYS[key];
+  document.getElementById('modalDate').textContent =
+    `${weekdays[date.getDay()]}, ${d}. ${MONTHS_DE[m-1]} ${y}` + (holiday ? ` · ${holiday}` : '');
+
+  const tip = DAY_TIPS[date.getDay()];
+  const tipEl = document.getElementById('dayTip');
+  tipEl.className = 'day-tip' + (tip.peak ? ' peak' : '');
+  tipEl.innerHTML = `★ Beste Zeit: <strong>${tip.time}</strong> · ${tip.followers} aktive Follower<br>Empfohlen: ${tip.rec}` +
+    (tip.peak ? ' · <strong>dein stärkster Tag!</strong>' : '');
+
+  const plan = plans[key] || {};
+  document.getElementById('contentType').value = plan.type || '';
+  document.getElementById('contentTitle').value = plan.title || '';
+  document.getElementById('caption').value = plan.caption || '';
+  document.getElementById('deleteBtn').style.display = plan.type ? 'inline-block' : 'none';
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  selectedDate = null;
+}
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if (currentMonth > MIN_MONTH) { currentMonth--; render(); }
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (currentMonth < MAX_MONTH) { currentMonth++; render(); }
+});
+document.getElementById('todayBtn').addEventListener('click', () => {
+  if (TODAY.getFullYear() === YEAR && TODAY.getMonth() >= MIN_MONTH && TODAY.getMonth() <= MAX_MONTH) {
+    currentMonth = TODAY.getMonth();
+    render();
+  }
+});
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+document.getElementById('saveBtn').addEventListener('click', () => {
+  if (!selectedDate) return;
+  const type = document.getElementById('contentType').value;
+  const title = document.getElementById('contentTitle').value.trim();
+  const caption = document.getElementById('caption').value.trim();
+  if (!type && !title && !caption) {
+    delete plans[selectedDate];
+  } else {
+    plans[selectedDate] = { type, title, caption };
+  }
+  savePlans();
+  render();
+  closeModal();
+});
+document.getElementById('deleteBtn').addEventListener('click', () => {
+  if (!selectedDate) return;
+  if (confirm('Eintrag wirklich löschen?')) {
+    delete plans[selectedDate];
+    savePlans();
+    render();
+    closeModal();
+  }
+});
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(plans, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `anne-loewenstein-content-plan-${YEAR}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importFile').click();
+});
+document.getElementById('importFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (confirm('Bestehende Einträge überschreiben? (Abbrechen = zusammenführen)')) {
+        plans = data;
+      } else {
+        plans = { ...plans, ...data };
+      }
+      savePlans();
+      render();
+    } catch {
+      alert('Ungültige Datei.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ===== Follower-Tracker =====
+function loadFollowers() {
+  try { return JSON.parse(localStorage.getItem('alImmoFollowers') || '{}'); }
+  catch { return {}; }
+}
+function saveFollowers(data) {
+  localStorage.setItem('alImmoFollowers', JSON.stringify(data));
+}
+let followers = loadFollowers();
+
+function renderFollowerPanel() {
+  const entries = Object.entries(followers).sort((a, b) => a[0].localeCompare(b[0]));
+  const countEl = document.getElementById('followerCount');
+  const deltaEl = document.getElementById('followerDelta');
+  const chartEl = document.getElementById('chartContainer');
+
+  if (entries.length === 0) {
+    countEl.textContent = '—';
+    deltaEl.textContent = '';
+    chartEl.innerHTML = '<div class="chart-empty">Noch keine Daten. Trag deine erste Follower-Zahl ein!</div>';
+    return;
+  }
+
+  const latest = entries[entries.length - 1];
+  countEl.textContent = Number(latest[1]).toLocaleString('de-DE');
+
+  if (entries.length >= 2) {
+    const prev = entries[entries.length - 2][1];
+    const diff = latest[1] - prev;
+    if (diff > 0) { deltaEl.className = 'follower-delta up'; deltaEl.textContent = `▲ +${diff} seit letztem Eintrag`; }
+    else if (diff < 0) { deltaEl.className = 'follower-delta down'; deltaEl.textContent = `▼ ${diff} seit letztem Eintrag`; }
+    else { deltaEl.className = 'follower-delta same'; deltaEl.textContent = '● unverändert'; }
+  } else {
+    deltaEl.className = 'follower-delta same';
+    deltaEl.textContent = 'Erster Eintrag';
+  }
+
+  // Chart: SVG Linie der letzten 30 Einträge
+  const data = entries.slice(-30);
+  const w = 500, h = 160, padL = 36, padR = 10, padT = 14, padB = 24;
+  const values = data.map(e => e[1]);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = Math.max(1, max - min);
+  const stepX = (w - padL - padR) / Math.max(1, data.length - 1);
+
+  let path = '';
+  let area = '';
+  data.forEach((e, i) => {
+    const x = padL + i * stepX;
+    const y = padT + (1 - (e[1] - min) / range) * (h - padT - padB);
+    path += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+    if (i === 0) area = `M${x.toFixed(1)},${(h-padB).toFixed(1)} L${x.toFixed(1)},${y.toFixed(1)}`;
+    else area += ` L${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  if (data.length > 0) {
+    const lastX = padL + (data.length - 1) * stepX;
+    area += ` L${lastX.toFixed(1)},${(h-padB).toFixed(1)} Z`;
+  }
+
+  const dots = data.map((e, i) => {
+    const x = padL + i * stepX;
+    const y = padT + (1 - (e[1] - min) / range) * (h - padT - padB);
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="#485F64"/>`;
+  }).join('');
+
+  const firstDate = formatDateShort(data[0][0]);
+  const lastDate = formatDateShort(data[data.length - 1][0]);
+
+  chartEl.innerHTML = `
+    <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <text x="${padL-6}" y="${padT+4}" text-anchor="end" font-size="10" fill="#709599" font-family="Abel">${max.toLocaleString('de-DE')}</text>
+      <text x="${padL-6}" y="${h-padB}" text-anchor="end" font-size="10" fill="#709599" font-family="Abel">${min.toLocaleString('de-DE')}</text>
+      <line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="#D1CCC3" stroke-width="1"/>
+      <path d="${area}" fill="#B6CFD1" opacity="0.45"/>
+      <path d="${path}" fill="none" stroke="#485F64" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      ${dots}
+    </svg>
+    <div class="chart-caption"><span>${firstDate}</span><span>${data.length} Einträge</span><span>${lastDate}</span></div>
+  `;
+}
+
+function formatDateShort(iso) {
+  const [y,m,d] = iso.split('-');
+  return `${d}.${m}.`;
+}
+
+document.getElementById('followerSaveBtn').addEventListener('click', () => {
+  const input = document.getElementById('followerInput');
+  const val = parseInt(input.value, 10);
+  if (!val || val < 0) { alert('Bitte gib eine gültige Follower-Zahl ein.'); return; }
+  followers[TODAY_KEY] = val;
+  saveFollowers(followers);
+  input.value = '';
+  renderFollowerPanel();
+});
+
+document.getElementById('followerInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('followerSaveBtn').click();
+});
+
+renderFollowerPanel();
+render();
+</script>
+</body>
+</html>
