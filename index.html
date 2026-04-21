@@ -250,6 +250,36 @@
   .day.has-content.weekend { background: var(--ostsee1); }
   .day.has-content:hover { background: var(--ostsee2); }
 
+  /* Status-Varianten */
+  .day.status-geplant { background: #EEF5F6; border-color: var(--ostsee1); border-left-width: 6px; border-left-color: var(--ostsee2); }
+  .day.status-erstellt { background: #FFFBD6; border-color: #F5E37A; border-left-width: 6px; border-left-color: var(--zitrone); }
+  .day.status-gepostet { background: #E5EDE9; border-color: #A8C4BC; border-left-width: 6px; border-left-color: #2B7A53; }
+  .day.status-gepostet .day-number { opacity: 0.75; }
+  .day.status-geplant:hover { background: var(--ostsee1); }
+  .day.status-erstellt:hover { background: #FFF59D; }
+  .day.status-gepostet:hover { background: #CCDDD3; }
+
+  .status-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Abel', sans-serif;
+    z-index: 1;
+    box-shadow: 0 0 0 2px var(--white);
+  }
+  .status-badge.geplant { background: var(--ostsee2); color: var(--white); }
+  .status-badge.erstellt { background: var(--zitrone); color: var(--mitternacht); }
+  .status-badge.gepostet { background: #2B7A53; color: var(--white); }
+  .day.holiday .status-badge { right: 18px; }
+
   .day-number {
     font-family: 'Noto Serif', serif;
     font-size: 18px;
@@ -637,7 +667,9 @@
     <div class="legend-item"><div class="legend-dot" style="background:var(--white);border:2px solid var(--mitternacht)"></div>Heute</div>
     <div class="legend-item"><div class="legend-dot" style="background:#F4F1EA;border:1px solid var(--sandbank2)"></div>Wochenende</div>
     <div class="legend-item"><div class="legend-dot" style="background:#FFFBD6;border:1px solid var(--zitrone)"></div>Feiertag</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--ostsee1);border:1px solid var(--ostsee2)"></div>Geplant</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--ostsee2)"></div>Geplant</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--zitrone);border:1px solid #E5CC10"></div>Erstellt</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2B7A53"></div>Gepostet</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--mitternacht)"></div>Reel</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--ostsee3)"></div>Carousel</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--zitrone)"></div>Bild Beitrag</div>
@@ -715,6 +747,14 @@
         <option value="Carousel">Carousel</option>
         <option value="Bild Beitrag">Bild Beitrag</option>
         <option value="Story">Story</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="contentStatus">Status</label>
+      <select id="contentStatus">
+        <option value="geplant">● Geplant</option>
+        <option value="erstellt">● Erstellt</option>
+        <option value="gepostet">● Gepostet</option>
       </select>
     </div>
     <div class="form-group">
@@ -830,7 +870,16 @@ function render() {
     if (isWeekend) cell.classList.add('weekend');
     if (holiday) cell.classList.add('holiday');
     if (key === TODAY_KEY) cell.classList.add('today');
-    if (plan && plan.type) cell.classList.add('has-content');
+    if (plan && plan.type) {
+      cell.classList.add('has-content');
+      const status = plan.status || 'geplant';
+      cell.classList.add('status-' + status);
+      const badge = document.createElement('div');
+      badge.className = 'status-badge ' + status;
+      badge.textContent = status === 'gepostet' ? '✓' : (status === 'erstellt' ? '◐' : '○');
+      badge.title = status.charAt(0).toUpperCase() + status.slice(1);
+      cell.appendChild(badge);
+    }
 
     const numEl = document.createElement('div');
     numEl.className = 'day-number';
@@ -878,6 +927,7 @@ function openModal(key) {
 
   const plan = plans[key] || {};
   document.getElementById('contentType').value = plan.type || '';
+  document.getElementById('contentStatus').value = plan.status || 'geplant';
   document.getElementById('contentTitle').value = plan.title || '';
   document.getElementById('caption').value = plan.caption || '';
   document.getElementById('deleteBtn').style.display = plan.type ? 'inline-block' : 'none';
@@ -908,12 +958,13 @@ document.getElementById('modalOverlay').addEventListener('click', (e) => {
 document.getElementById('saveBtn').addEventListener('click', () => {
   if (!selectedDate) return;
   const type = document.getElementById('contentType').value;
+  const status = document.getElementById('contentStatus').value || 'geplant';
   const title = document.getElementById('contentTitle').value.trim();
   const caption = document.getElementById('caption').value.trim();
   if (!type && !title && !caption) {
     delete plans[selectedDate];
   } else {
-    plans[selectedDate] = { type, title, caption };
+    plans[selectedDate] = { type, status, title, caption };
   }
   savePlans();
   render();
